@@ -1,16 +1,11 @@
-# konsi_challenge
+# Konsi Challenge
 
-A new Flutter project.
+Hello world!
 
-## Getting Started
+## Requirements
 
-This project is a starting point for a Flutter application.
+To either manage or build this project, make sure you have the following:
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Flutter 3.3.2
+- Android Q (API 29)
+- iOS 14

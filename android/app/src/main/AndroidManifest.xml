@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.konsi_challenge">
+    package="com.franciscomiranda.konsi_challenge">
    <application
         android:label="konsi_challenge"
         android:name="${applicationName}"

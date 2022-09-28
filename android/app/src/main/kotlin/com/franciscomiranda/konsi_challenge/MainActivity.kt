@@ -1,4 +1,4 @@
-package com.example.konsi_challenge
+package com.franciscomiranda.konsi_challenge
 
 import io.flutter.embedding.android.FlutterActivity
 

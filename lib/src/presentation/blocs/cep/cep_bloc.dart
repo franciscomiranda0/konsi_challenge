@@ -22,7 +22,8 @@ class CepBloc extends Bloc<CepEvent, CepState> {
     final dataState = await _getCepUseCase(params: event.code);
 
     if (dataState is DataSuccess) {
-      emit(CepLoadSuccess(cep: dataState.data));
+      _cep = dataState.data;
+      emit(CepLoadSuccess(cep: _cep));
     } else if (dataState is DataFailure) {
       emit(CepLoadError(message: dataState.errorMessage));
     }

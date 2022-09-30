@@ -1,5 +1,5 @@
 import 'package:http/http.dart' as http show Response, get;
-import 'package:konsi_challenge/src/core/resources/response.dart';
+import 'package:konsi_challenge/src/core/resources/core_response.dart';
 
 abstract class HttpGet {
   Future<CoreResponse> get(

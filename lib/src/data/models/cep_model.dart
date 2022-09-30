@@ -1,7 +1,7 @@
 import 'package:konsi_challenge/src/domain/entities/cep.dart';
 
-class CEPModel extends CEP {
-  const CEPModel({
+class CepModel extends Cep {
+  const CepModel({
     required super.code,
     required super.state,
     required super.city,
@@ -9,8 +9,8 @@ class CEPModel extends CEP {
     required super.street,
   });
 
-  factory CEPModel.fromMap(Map<String, dynamic> map) {
-    return CEPModel(
+  factory CepModel.fromMap(Map<String, dynamic> map) {
+    return CepModel(
       code: map['code'],
       state: map['state'],
       city: map['city'],

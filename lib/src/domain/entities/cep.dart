@@ -1,11 +1,11 @@
-class CEP {
+class Cep {
   final String code;
   final String state;
   final String city;
   final String neighborhood;
   final String street;
 
-  const CEP({
+  const Cep({
     required this.code,
     required this.state,
     required this.city,

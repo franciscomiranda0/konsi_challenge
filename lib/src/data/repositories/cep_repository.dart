@@ -2,6 +2,7 @@ import 'dart:convert' show jsonDecode;
 
 import 'package:konsi_challenge/src/core/environment/environment.dart';
 import 'package:konsi_challenge/src/core/resources/data_state.dart';
+import 'package:konsi_challenge/src/core/utils/messages.dart';
 import 'package:konsi_challenge/src/data/datasources/remote_datasource.dart';
 import 'package:konsi_challenge/src/data/models/cep_model.dart';
 import 'package:konsi_challenge/src/domain/repositories/cep_repository_interface.dart';
@@ -20,8 +21,7 @@ class CepRepository implements CepRepositoryInterface {
 
     if (coreResponse.hasError) {
       return const DataFailure<CepModel>(
-        errorMessage:
-            'Não foi possível encontrar o CEP. Por favor, cheque o código e/ou tente novamente.',
+        errorMessage: Messages.cepRequestFailure,
       );
     } else {
       return DataSuccess<CepModel>(

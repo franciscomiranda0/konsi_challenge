@@ -15,19 +15,25 @@ class CepRepository implements CepRepositoryInterface {
 
   @override
   Future<DataState<CepModel>> getCepFromCode(String code) async {
-    final baseUrl =
-        '${ProductionEnvironment.cepApiHost}${ProductionEnvironment.cepApiPath}';
-    final coreResponse = await _remoteDatasource.get('$baseUrl$code.json');
+    try {
+      final baseUrl =
+          '${ProductionEnvironment.cepApiHost}${ProductionEnvironment.cepApiPath}';
+      final coreResponse = await _remoteDatasource.get('$baseUrl$code.json');
 
-    if (coreResponse.hasError) {
+      if (coreResponse.hasError) {
+        return const DataFailure<CepModel>(
+          errorMessage: Messages.cepRequestFailure,
+        );
+      } else {
+        return DataSuccess<CepModel>(
+          data: CepModel.fromMap(
+            jsonDecode(coreResponse.data),
+          ),
+        );
+      }
+    } catch (_) {
       return const DataFailure<CepModel>(
-        errorMessage: Messages.cepRequestFailure,
-      );
-    } else {
-      return DataSuccess<CepModel>(
-        data: CepModel.fromMap(
-          jsonDecode(coreResponse.data),
-        ),
+        errorMessage: Messages.unknownRequestFailure,
       );
     }
   }

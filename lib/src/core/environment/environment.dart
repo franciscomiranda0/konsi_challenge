@@ -1,20 +1,8 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-abstract class IEnvironment {
-  String? get cepApiHost;
-  String? get cepApiPath;
-  bool get isProduction;
-}
-
-class ProductionEnvironment implements IEnvironment {
+class ProductionEnvironment {
   const ProductionEnvironment._();
 
-  @override
-  String? get cepApiHost => dotenv.env['CEP_API_HOST'];
-
-  @override
-  String? get cepApiPath => dotenv.env['CEP_API_PATH'];
-
-  @override
-  bool get isProduction => true;
+  static String? get cepApiHost => dotenv.env['CEP_API_HOST'];
+  static String? get cepApiPath => dotenv.env['CEP_API_PATH'];
 }

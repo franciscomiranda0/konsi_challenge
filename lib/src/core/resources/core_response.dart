@@ -1,4 +1,4 @@
-class CoreResponse<T> {
+class CoreResponse {
   final int statusCode;
   final String data;
 

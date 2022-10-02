@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:konsi_challenge/src/presentation/pages/cep_manager_page/widgets/notebook_view.dart';
+import 'package:konsi_challenge/src/presentation/pages/cep_manager_page/widgets/search_view.dart';
 
 class CepManagerPage extends HookWidget {
   const CepManagerPage({Key? key}) : super(key: key);
@@ -81,6 +82,6 @@ class SearchViewState extends CepManagerView {
       : super._(
           selectedIndex: 1,
           primarySwatch: Colors.green,
-          view: const SizedBox(),
+          view: const SearchView(),
         );
 }

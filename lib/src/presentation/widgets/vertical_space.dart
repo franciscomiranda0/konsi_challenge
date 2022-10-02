@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
 
-class VerticalSpacer extends SizedBox {
-  const VerticalSpacer(double size, {super.key}) : super(height: size);
+class VerticalSpace extends SizedBox {
+  const VerticalSpace(double size, {super.key}) : super(height: size);
 }

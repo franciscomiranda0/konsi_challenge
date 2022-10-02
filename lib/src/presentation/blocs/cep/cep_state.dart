@@ -26,3 +26,7 @@ class CepLoadSuccess extends CepState {
 class CepLoadError extends CepState {
   const CepLoadError({required super.message});
 }
+
+class CepLoadProgressEnd extends CepState {
+  const CepLoadProgressEnd();
+}

@@ -5,27 +5,28 @@ import 'package:konsi_challenge/src/presentation/pages/cep_manager_page/widgets/
 class CepManagerPage extends HookWidget {
   const CepManagerPage({Key? key}) : super(key: key);
 
-  void _setView({
+  void _setSelectedView({
     required int index,
-    required ValueNotifier<ViewState> viewState,
+    required ValueNotifier<CepManagerView> viewState,
   }) =>
-      viewState.value = index == 0
-          ? const NotebookViewState(selectedIndex: 0)
-          : const SearchViewState(selectedIndex: 1);
+      viewState.value = CepManagerView.fromIndex(index);
 
   @override
   Widget build(BuildContext context) {
-    final viewState = useState<ViewState>(
-      const NotebookViewState(selectedIndex: 0),
-    );
+    final selectedView = useState<CepManagerView>(CepManagerView.fromIndex(0));
 
     return Theme(
-      data: ThemeData(primarySwatch: viewState.value.primarySwatch),
+      data: ThemeData(primarySwatch: selectedView.value.primarySwatch),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Gerenciador de CEPs')),
+        appBar: AppBar(
+          title: const Text('Gerenciador de CEPs'),
+        ),
         bottomNavigationBar: BottomNavigationBar(
-          currentIndex: viewState.value.selectedIndex,
-          onTap: (index) => _setView(index: index, viewState: viewState),
+          currentIndex: selectedView.value.selectedIndex,
+          onTap: (index) => _setSelectedView(
+            index: index,
+            viewState: selectedView,
+          ),
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.book),
@@ -37,35 +38,48 @@ class CepManagerPage extends HookWidget {
             ),
           ],
         ),
-        body: viewState.value.view,
+        body: selectedView.value.view,
       ),
     );
   }
 }
 
-abstract class ViewState {
+@immutable
+abstract class CepManagerView {
   final Widget view;
   final MaterialColor primarySwatch;
   final int selectedIndex;
 
-  const ViewState({
+  const CepManagerView._({
     required this.view,
     required this.primarySwatch,
     required this.selectedIndex,
   });
+
+  factory CepManagerView.fromIndex(int index) {
+    switch (index) {
+      case 1:
+        return const SearchViewState._();
+      case 0:
+      default:
+        return const NotebookViewState._();
+    }
+  }
 }
 
-class NotebookViewState extends ViewState {
-  const NotebookViewState({required super.selectedIndex})
-      : super(
+class NotebookViewState extends CepManagerView {
+  const NotebookViewState._()
+      : super._(
+          selectedIndex: 0,
           primarySwatch: Colors.blue,
           view: const NotebookView(),
         );
 }
 
-class SearchViewState extends ViewState {
-  const SearchViewState({required super.selectedIndex})
-      : super(
+class SearchViewState extends CepManagerView {
+  const SearchViewState._()
+      : super._(
+          selectedIndex: 1,
           primarySwatch: Colors.green,
           view: const SizedBox(),
         );

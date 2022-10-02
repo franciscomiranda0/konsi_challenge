@@ -3,14 +3,12 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:konsi_challenge/src/presentation/pages/cep_manager_page/widgets/notebook_view.dart';
 
 class CepManagerPage extends HookWidget {
-  static const _views = [NotebookView(), SizedBox()];
-
   const CepManagerPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final selectedIndex = useState(0);
-    final ValueNotifier<Widget> indexView = useState(const NotebookView());
+    final indexView = useState<Widget>(const NotebookView());
     final indexColor = useState(Colors.amber);
 
     return Theme(
@@ -38,7 +36,7 @@ class CepManagerPage extends HookWidget {
             ),
           ],
         ),
-        body: _views[selectedIndex.value],
+        body: indexView.value,
       ),
     );
   }

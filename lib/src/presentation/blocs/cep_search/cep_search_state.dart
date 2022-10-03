@@ -1,4 +1,4 @@
-part of 'cep_bloc.dart';
+part of 'cep_search_bloc.dart';
 
 @immutable
 abstract class CepState {

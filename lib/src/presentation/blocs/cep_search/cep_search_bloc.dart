@@ -4,8 +4,8 @@ import 'package:konsi_challenge/src/core/resources/data_state.dart';
 import 'package:konsi_challenge/src/domain/entities/cep.dart';
 import 'package:konsi_challenge/src/domain/usecases/get_cep_usecase.dart';
 
-part 'cep_event.dart';
-part 'cep_state.dart';
+part 'cep_search_event.dart';
+part 'cep_search_state.dart';
 
 class CepBloc extends Bloc<CepEvent, CepState> {
   final GetCepUseCase _getCepUseCase;

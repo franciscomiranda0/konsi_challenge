@@ -52,6 +52,16 @@ class SearchView extends HookWidget {
               cep: _cepMock,
               cepExpansionTileStyle: CepExpansionTileStyle.neighborhoodEmphasis,
             ),
+            const KonsiVerticalSpacer(16),
+            KonsiPrimaryButton(
+              onPressed: () {},
+              child: const Text('VER NO MAPA'),
+            ),
+            const KonsiVerticalSpacer(16),
+            KonsiPrimaryButton(
+              onPressed: () {},
+              child: const Text('SALVAR'),
+            ),
           ],
         ],
       ),

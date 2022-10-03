@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:konsi_challenge/src/domain/entities/cep.dart';
+import 'package:konsi_challenge/src/presentation/widgets/konsi_widgets.dart';
 
 const _cepMock = Cep(
   code: '88000123',
@@ -35,54 +35,11 @@ class NotebookView extends StatelessWidget {
       separatorBuilder: (_, __) => const SizedBox(height: 16),
       itemCount: _cepsMock.length,
       itemBuilder: (_, int index) {
-        return _Item(cep: _cepsMock[index]);
+        return KonsiCepExpansionTile(
+          cep: _cepsMock[index],
+          cepExpansionTileStyle: CepExpansionTileStyle.cepEmphasis,
+        );
       },
-    );
-  }
-}
-
-class _Item extends HookWidget {
-  final Cep _cep;
-
-  const _Item({Key? key, required Cep cep})
-      : _cep = cep,
-        super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final isExpanded = useState(false);
-
-    return ExpansionTile(
-      backgroundColor: Colors.black12,
-      expandedCrossAxisAlignment: CrossAxisAlignment.stretch,
-      onExpansionChanged: (_isExpanded) => isExpanded.value = _isExpanded,
-      trailing: Text('ver ${isExpanded.value ? '-' : '+'}'),
-      subtitle: Text(_cep.neighborhood),
-      title: Text(_cep.code),
-      childrenPadding: const EdgeInsets.all(8),
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text('Rua:'),
-            Text(_cep.street),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text('Município:'),
-            Text(_cep.city),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text('UF:'),
-            Text(_cep.state),
-          ],
-        ),
-      ],
     );
   }
 }

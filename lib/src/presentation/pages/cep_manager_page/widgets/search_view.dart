@@ -1,14 +1,22 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:konsi_challenge/src/domain/entities/cep.dart';
+import 'package:konsi_challenge/src/presentation/blocs/cep_search/cep_search_bloc.dart';
 import 'package:konsi_challenge/src/presentation/widgets/konsi_widgets.dart';
 
 class SearchView extends HookWidget {
   const SearchView({Key? key}) : super(key: key);
 
+  void _getCep(BuildContext context, String code) =>
+      context.read<CepSearchBloc>().add(CepSearched(code));
+
   @override
   Widget build(BuildContext context) {
     final viewHeight = MediaQuery.of(context).size.height;
+    final cepController = useTextEditingController();
     final hasSearched = useState(false);
     final showProgress = useState(false);
     final showResult = useState(false);
@@ -27,6 +35,11 @@ class SearchView extends HookWidget {
             height: hasSearched.value ? 0 : viewHeight * .3,
           ),
           TextFormField(
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              CepInputFormatter(),
+            ],
+            controller: cepController,
             cursorColor: Colors.green,
             decoration: const InputDecoration(
               contentPadding: EdgeInsets.symmetric(horizontal: 8),
@@ -35,15 +48,13 @@ class SearchView extends HookWidget {
               hintText: 'digite um CEP para começar',
               hintStyle: TextStyle(color: Colors.black45),
             ),
-            textAlign: TextAlign.start,
+            textAlign: TextAlign.center,
           ),
           KonsiPrimaryButton(
             showLoadIndicator: showProgress.value,
-            onPressed: () {
-              showResult.value = showResult.value ? false : showResult.value;
-              hasSearched.value = !hasSearched.value;
-              showProgress.value = !showProgress.value;
-            },
+            onPressed: cepController.text.isNotEmpty
+                ? () => _getCep(context, cepController.text)
+                : null,
             child: const Text('PESQUISAR'),
           ),
           if (hasSearched.value) ...[

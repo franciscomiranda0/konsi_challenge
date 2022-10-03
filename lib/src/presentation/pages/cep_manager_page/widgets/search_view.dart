@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:konsi_challenge/src/presentation/widgets/konsi_primary_button.dart';
-import 'package:konsi_challenge/src/presentation/widgets/konsi_vertical_spacer.dart';
+import 'package:konsi_challenge/src/presentation/widgets/konsi_widgets.dart';
 
 class SearchView extends StatelessWidget {
   const SearchView({Key? key}) : super(key: key);

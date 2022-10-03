@@ -7,12 +7,12 @@ import 'package:konsi_challenge/src/domain/usecases/get_cep_usecase.dart';
 part 'cep_search_event.dart';
 part 'cep_search_state.dart';
 
-class CepBloc extends Bloc<CepEvent, CepState> {
+class CepSearchBloc extends Bloc<CepSearchEvent, CepSearchState> {
   final GetCepUseCase _getCepUseCase;
 
   Cep? _cep;
 
-  CepBloc(this._getCepUseCase) : super(const CepLoadInitial()) {
+  CepSearchBloc(this._getCepUseCase) : super(const CepInitial()) {
     on<CepSearched>(_getCepByCode);
   }
 

@@ -1,11 +1,11 @@
 part of 'cep_search_bloc.dart';
 
 @immutable
-abstract class CepEvent {
-  const CepEvent();
+abstract class CepSearchEvent {
+  const CepSearchEvent();
 }
 
-class CepSearched extends CepEvent {
+class CepSearched extends CepSearchEvent {
   final String code;
 
   const CepSearched(this.code);

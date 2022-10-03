@@ -11,5 +11,5 @@ Future<void> initializeDependencies() async {
   injector.registerSingleton<RemoteDatasourceInterface>(RemoteDatasource());
   injector.registerSingleton<CepRepositoryInterface>(CepRepository(injector()));
   injector.registerSingleton<GetCepUseCase>(GetCepUseCase(injector()));
-  injector.registerFactory<CepBloc>(() => CepBloc(injector()));
+  injector.registerFactory<CepSearchBloc>(() => CepSearchBloc(injector()));
 }

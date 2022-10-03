@@ -1,32 +1,32 @@
 part of 'cep_search_bloc.dart';
 
 @immutable
-abstract class CepState {
+abstract class CepSearchState {
   final Cep? cep;
   final String? message;
 
-  const CepState({
+  const CepSearchState({
     this.cep,
     this.message,
   });
 }
 
-class CepLoadInitial extends CepState {
-  const CepLoadInitial();
+class CepInitial extends CepSearchState {
+  const CepInitial();
 }
 
-class CepLoadInProgress extends CepState {
+class CepLoadInProgress extends CepSearchState {
   const CepLoadInProgress();
 }
 
-class CepLoadSuccess extends CepState {
+class CepLoadSuccess extends CepSearchState {
   const CepLoadSuccess({required super.cep});
 }
 
-class CepLoadError extends CepState {
+class CepLoadError extends CepSearchState {
   const CepLoadError({required super.message});
 }
 
-class CepLoadProgressEnd extends CepState {
+class CepLoadProgressEnd extends CepSearchState {
   const CepLoadProgressEnd();
 }

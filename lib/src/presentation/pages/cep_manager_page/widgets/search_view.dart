@@ -62,6 +62,12 @@ class SearchView extends HookWidget {
               onPressed: () {},
               child: const Text('SALVAR'),
             ),
+            const KonsiVerticalSpacer(16),
+            KonsiSecondaryButton(
+              onPressed: () {},
+              child: const Text('NOVA CONSULTA'),
+            ),
+            const KonsiVerticalSpacer(16),
           ],
         ],
       ),

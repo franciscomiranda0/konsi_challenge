@@ -28,8 +28,9 @@ class SearchView extends HookWidget {
               fillColor: Colors.black12,
               filled: true,
               hintText: 'digite um CEP para começar',
+              hintStyle: TextStyle(color: Colors.black45),
             ),
-            textAlign: TextAlign.end,
+            textAlign: TextAlign.start,
           ),
           KonsiPrimaryButton(
             showLoadIndicator: showProgress.value,

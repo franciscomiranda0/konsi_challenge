@@ -147,6 +147,7 @@ class Validators {
 }
 
 const _cepMock = Cep(
+  id: 80,
   code: '88000123',
   state: 'SC',
   city: 'Florianópolis',

@@ -7,7 +7,7 @@ class CepModel extends Cep {
     required super.city,
     required super.neighborhood,
     required super.street,
-  });
+  }) : super(id: -1);
 
   factory CepModel.fromMap(Map<String, dynamic> map) {
     return CepModel._(

@@ -3,6 +3,7 @@ import 'package:konsi_challenge/src/domain/entities/cep.dart';
 import 'package:konsi_challenge/src/presentation/widgets/konsi_widgets.dart';
 
 const _cepMock = Cep(
+  id: 21,
   code: '88000123',
   state: 'SC',
   city: 'Florianópolis',

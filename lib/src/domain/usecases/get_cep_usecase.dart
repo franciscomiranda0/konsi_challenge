@@ -11,6 +11,6 @@ class GetCepUseCase implements UseCase<DataState<Cep>, String> {
 
   @override
   Future<DataState<Cep>> call({required String params}) {
-    return _cepRepository.getCepFromCode(params);
+    return _cepRepository.getCepByCode(params);
   }
 }

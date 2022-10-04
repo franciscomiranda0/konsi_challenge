@@ -12,7 +12,7 @@ class CepRepository implements CepRepositoryInterface {
       : _remoteDatasource = remoteDatasource;
 
   @override
-  Future<DataState<CepModel>> getCepFromCode(String code) async {
+  Future<DataState<CepModel>> getCepByCode(String code) async {
     try {
       final coreResponse = await _remoteDatasource.get(
           "${ProductionEnvironment.cepApiScheme}://${ProductionEnvironment.cepApiHost}${ProductionEnvironment.cepApiPathStart}/${code.replaceAll(RegExp(r'[.,]'), '')}${ProductionEnvironment.cepApiPathEnd}");

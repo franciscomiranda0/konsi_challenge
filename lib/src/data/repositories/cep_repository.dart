@@ -1,5 +1,3 @@
-import 'dart:convert' show jsonDecode;
-
 import 'package:konsi_challenge/src/core/environment/environment.dart';
 import 'package:konsi_challenge/src/core/resources/data_state.dart';
 import 'package:konsi_challenge/src/core/utils/messages.dart';
@@ -16,9 +14,8 @@ class CepRepository implements CepRepositoryInterface {
   @override
   Future<DataState<CepModel>> getCepFromCode(String code) async {
     try {
-      final baseUrl =
-          '${ProductionEnvironment.cepApiHost}${ProductionEnvironment.cepApiPath}';
-      final coreResponse = await _remoteDatasource.get('$baseUrl$code.json');
+      final coreResponse = await _remoteDatasource.get(
+          "${ProductionEnvironment.cepApiScheme}://${ProductionEnvironment.cepApiHost}${ProductionEnvironment.cepApiPathStart}/${code.replaceAll(RegExp(r'[.,]'), '')}${ProductionEnvironment.cepApiPathEnd}");
 
       if (coreResponse.hasError) {
         return const DataFailure<CepModel>(
@@ -26,9 +23,7 @@ class CepRepository implements CepRepositoryInterface {
         );
       } else {
         return DataSuccess<CepModel>(
-          data: CepModel.fromMap(
-            jsonDecode(coreResponse.data),
-          ),
+          data: CepModel.fromMap(coreResponse.data),
         );
       }
     } catch (_) {

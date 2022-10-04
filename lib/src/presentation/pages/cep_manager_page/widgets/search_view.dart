@@ -10,16 +10,24 @@ import 'package:konsi_challenge/src/presentation/widgets/konsi_widgets.dart';
 class SearchView extends HookWidget {
   const SearchView({Key? key}) : super(key: key);
 
-  void _getCep(BuildContext context, String code) =>
+  void _validateAndGetCep(
+    BuildContext context,
+    String code,
+    GlobalKey<FormFieldState> key,
+  ) {
+    if (key.currentState?.validate() ?? false) {
       context.read<CepSearchBloc>().add(CepSearched(code));
+      _dismiss(context);
+    }
+  }
+
+  void _dismiss(BuildContext context) => FocusScope.of(context).unfocus();
 
   @override
   Widget build(BuildContext context) {
     final viewHeight = MediaQuery.of(context).size.height;
     final cepController = useTextEditingController();
-    final hasSearched = useState(false);
-    final showProgress = useState(false);
-    final showResult = useState(false);
+    final cepFieldKey = useState(GlobalKey<FormFieldState>());
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -27,18 +35,20 @@ class SearchView extends HookWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const KonsiVerticalSpacer(16),
-          AnimatedContainer(
-            onEnd: () =>
-                showResult.value = !showResult.value ? true : showResult.value,
-            curve: Curves.easeInOut,
-            duration: const Duration(milliseconds: 1250),
-            height: hasSearched.value ? 0 : viewHeight * .3,
+          BlocBuilder<CepSearchBloc, CepSearchState>(
+            builder: (context, state) {
+              return AnimatedContainer(
+                curve: Curves.easeInOut,
+                duration: const Duration(milliseconds: 1250),
+                height: state is CepInitial ||
+                        state is CepLoadInProgress ||
+                        state is CepLoadError
+                    ? viewHeight * .3
+                    : 0,
+              );
+            },
           ),
           TextFormField(
-            inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
-              CepInputFormatter(),
-            ],
             controller: cepController,
             cursorColor: Colors.green,
             decoration: const InputDecoration(
@@ -48,41 +58,91 @@ class SearchView extends HookWidget {
               hintText: 'digite um CEP para começar',
               hintStyle: TextStyle(color: Colors.black45),
             ),
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              CepInputFormatter(),
+            ],
+            key: cepFieldKey.value,
             textAlign: TextAlign.center,
+            validator: Validators.cepValidator,
           ),
-          KonsiPrimaryButton(
-            showLoadIndicator: showProgress.value,
-            onPressed: cepController.text.isNotEmpty
-                ? () => _getCep(context, cepController.text)
-                : null,
-            child: const Text('PESQUISAR'),
-          ),
-          if (hasSearched.value) ...[
-            KonsiVerticalSpacer(viewHeight * .2),
-            const KonsiCepExpansionTile(
-              cep: _cepMock,
-              cepExpansionTileStyle: CepExpansionTileStyle.neighborhoodEmphasis,
-            ),
-            const KonsiVerticalSpacer(16),
-            KonsiPrimaryButton(
-              onPressed: () {},
-              child: const Text('VER NO MAPA'),
-            ),
-            const KonsiVerticalSpacer(16),
-            KonsiPrimaryButton(
-              onPressed: () {},
-              child: const Text('SALVAR'),
-            ),
-            const KonsiVerticalSpacer(16),
-            KonsiSecondaryButton(
-              onPressed: () {},
-              child: const Text('NOVA CONSULTA'),
-            ),
-            const KonsiVerticalSpacer(16),
-          ],
+          BlocBuilder<CepSearchBloc, CepSearchState>(builder: (context, state) {
+            return KonsiPrimaryButton(
+              showLoadIndicator: state is CepLoadInProgress,
+              onPressed: () => _validateAndGetCep(
+                context,
+                cepController.text,
+                cepFieldKey.value,
+              ),
+              child: const Text('PESQUISAR'),
+            );
+          }),
+          const _SearchedCepData(),
         ],
       ),
     );
+  }
+}
+
+class _SearchedCepData extends StatelessWidget {
+  const _SearchedCepData({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final viewHeight = MediaQuery.of(context).size.height;
+
+    return BlocBuilder<CepSearchBloc, CepSearchState>(
+      builder: (context, state) {
+        if (state is CepLoadInProgress) {
+          return const SizedBox.shrink();
+        } else if (state is CepLoadSuccess) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              KonsiVerticalSpacer(viewHeight * .2),
+              KonsiCepExpansionTile(
+                cep: state.cep,
+                cepExpansionTileStyle:
+                    CepExpansionTileStyle.neighborhoodEmphasis,
+              ),
+              const KonsiVerticalSpacer(16),
+              KonsiPrimaryButton(
+                onPressed: () {},
+                child: const Text('VER NO MAPA'),
+              ),
+              const KonsiVerticalSpacer(16),
+              KonsiPrimaryButton(
+                onPressed: () {},
+                child: const Text('SALVAR'),
+              ),
+              const KonsiVerticalSpacer(16),
+              KonsiSecondaryButton(
+                onPressed: () {},
+                child: const Text('NOVA CONSULTA'),
+              ),
+              const KonsiVerticalSpacer(16),
+            ],
+          );
+        }
+        return const SizedBox.shrink();
+      },
+    );
+  }
+}
+
+class Validators {
+  const Validators._();
+
+  static String? cepValidator(String? cep) {
+    String? errorText;
+
+    if (cep != null) {
+      if (cep.length != 10) {
+        errorText = 'Formato de CEP inválido.';
+      }
+    }
+
+    return errorText;
   }
 }
 

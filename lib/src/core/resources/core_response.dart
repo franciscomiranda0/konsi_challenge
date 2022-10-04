@@ -1,11 +1,9 @@
 class CoreResponse {
-  final int statusCode;
-  final String data;
+  final bool hasError;
+  final Map<String, dynamic> data;
 
   const CoreResponse({
-    required this.statusCode,
+    required this.hasError,
     required this.data,
   });
-
-  bool get hasError => statusCode < 200 || statusCode >= 300;
 }

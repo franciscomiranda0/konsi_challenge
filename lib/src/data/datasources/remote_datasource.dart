@@ -1,4 +1,4 @@
-import 'package:http/http.dart' as http show get;
+import 'package:dio/dio.dart';
 import 'package:konsi_challenge/src/core/resources/core_response.dart';
 
 abstract class HttpGet {
@@ -16,14 +16,11 @@ class RemoteDatasource implements RemoteDatasourceInterface {
     String url, {
     Map<String, dynamic>? queryParameters,
   }) async {
-    final rawResponse = await http.get(Uri(
-      path: url,
-      queryParameters: queryParameters,
-    ));
+    final dioResponse = await Dio().get(url);
 
     return CoreResponse(
-      data: rawResponse.body,
-      statusCode: rawResponse.statusCode,
+      data: dioResponse.data,
+      hasError: dioResponse.data['erro'] == 'true',
     );
   }
 }

@@ -11,11 +11,11 @@ class CepModel extends Cep {
 
   factory CepModel.fromMap(Map<String, dynamic> map) {
     return CepModel._(
-      code: map['code'],
-      state: map['state'],
-      city: map['city'],
-      neighborhood: map['district'],
-      street: map['address'],
+      code: map['cep'],
+      state: map['uf'],
+      city: map['localidade'],
+      neighborhood: map['bairro'],
+      street: map['logradouro'],
     );
   }
 }

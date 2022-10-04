@@ -21,10 +21,16 @@ class CepLoadInProgress extends CepSearchState {
 
 class CepLoadSuccess extends CepSearchState {
   const CepLoadSuccess({required super.cep});
+
+  @override
+  Cep get cep => super.cep!;
 }
 
 class CepLoadError extends CepSearchState {
   const CepLoadError({required super.message});
+
+  @override
+  String get message => super.message!;
 }
 
 class CepLoadProgressEnd extends CepSearchState {

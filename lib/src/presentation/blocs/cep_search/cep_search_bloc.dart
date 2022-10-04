@@ -18,17 +18,13 @@ class CepSearchBloc extends Bloc<CepSearchEvent, CepSearchState> {
 
   Future<void> _getCepByCode(CepSearched event, Emitter emit) async {
     emit(const CepLoadInProgress());
-
-    _getCepUseCase(params: event.code).then(
-      (dataState) {
-        if (dataState is DataSuccess) {
-          _cep = dataState.data;
-          emit(CepLoadSuccess(cep: _cep));
-        } else if (dataState is DataFailure) {
-          emit(CepLoadError(message: dataState.errorMessage));
-        }
-      },
-    ).whenComplete(() => const CepLoadProgressEnd());
+    final dataState = await _getCepUseCase(params: event.code);
+    if (dataState is DataSuccess) {
+      _cep = dataState.data;
+      emit(CepLoadSuccess(cep: _cep));
+    } else if (dataState is DataFailure) {
+      emit(CepLoadError(message: dataState.errorMessage));
+    }
   }
 
   Cep? get lastSearchedCep => _cep;

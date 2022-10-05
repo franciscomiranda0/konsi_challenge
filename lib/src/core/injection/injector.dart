@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:konsi_challenge/src/core/utils/constants.dart';
 import 'package:konsi_challenge/src/data/datasources/local_datasource/database/app_database.dart';
@@ -34,7 +35,8 @@ Future<void> initializeDependencies() async {
   injector.registerSingleton<GetCepByIdUseCase>(GetCepByIdUseCase(injector()));
   injector.registerSingleton<SaveCepUseCase>(SaveCepUseCase(injector()));
   injector.registerSingleton<EraseCepUseCase>(EraseCepUseCase(injector()));
-  injector.registerFactory<CepSearchBloc>(() => CepSearchBloc(injector()));
+  injector.registerSingleton<CepSearchBloc Function(BuildContext)>(
+      (_) => CepSearchBloc(injector()));
   injector.registerFactory<LocalCepCubit>(() => LocalCepCubit(
         eraseCepUseCase: injector(),
         getAllSavedCepsUseCase: injector(),

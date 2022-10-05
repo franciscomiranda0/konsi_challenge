@@ -11,12 +11,16 @@ abstract class HttpGet {
 abstract class RemoteDatasourceInterface implements HttpGet {}
 
 class RemoteDatasource implements RemoteDatasourceInterface {
+  final Dio _dio;
+
+  RemoteDatasource(this._dio);
+
   @override
   Future<CoreResponse> get(
     String url, {
     Map<String, dynamic>? queryParameters,
   }) async {
-    final dioResponse = await Dio().get(url);
+    final dioResponse = await _dio.get(url);
 
     return CoreResponse(
       data: dioResponse.data,

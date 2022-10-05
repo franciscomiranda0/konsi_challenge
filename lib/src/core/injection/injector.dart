@@ -19,7 +19,9 @@ Future<void> initializeDependencies() async {
       await $FloorAppDatabase.databaseBuilder(Constants.cepTableName).build();
   injector.registerSingleton<AppDatabase>(database);
   injector.registerSingleton<Dio>(Dio());
-  injector.registerSingleton<RemoteDatasourceInterface>(RemoteDatasource());
+  injector.registerSingleton<RemoteDatasourceInterface>(
+    RemoteDatasource(injector()),
+  );
   injector.registerSingleton<CepRepositoryInterface>(CepRepository(
     database: injector(),
     remoteDatasource: injector(),

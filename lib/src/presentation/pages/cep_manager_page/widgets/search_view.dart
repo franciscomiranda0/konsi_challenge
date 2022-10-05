@@ -7,6 +7,7 @@ import 'package:konsi_challenge/src/core/injection/injector.dart';
 import 'package:konsi_challenge/src/domain/entities/cep.dart';
 import 'package:konsi_challenge/src/presentation/blocs/cep_search/cep_search_bloc.dart';
 import 'package:konsi_challenge/src/presentation/widgets/konsi_widgets.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 
 class SearchView extends HookWidget {
   const SearchView({Key? key}) : super(key: key);
@@ -92,6 +93,9 @@ class SearchView extends HookWidget {
 class _SearchedCepData extends StatelessWidget {
   const _SearchedCepData({Key? key}) : super(key: key);
 
+  void _launchMapsFromCep(Cep cep) => MapsLauncher.launchQuery(
+      '${cep.street}, ${cep.city} - ${cep.state} ${cep.code}');
+
   @override
   Widget build(BuildContext context) {
     final viewHeight = MediaQuery.of(context).size.height;
@@ -112,7 +116,7 @@ class _SearchedCepData extends StatelessWidget {
               ),
               const KonsiVerticalSpacer(16),
               KonsiPrimaryButton(
-                onPressed: () {},
+                onPressed: () => _launchMapsFromCep(state.cep),
                 child: const Text('VER NO MAPA'),
               ),
               const KonsiVerticalSpacer(16),
@@ -150,12 +154,3 @@ class Validators {
     return errorText;
   }
 }
-
-const _cepMock = Cep(
-  id: 80,
-  code: '88000123',
-  state: 'SC',
-  city: 'Florianópolis',
-  neighborhood: 'Campeche',
-  street: 'Av. Pequeno Príncipe - lado par',
-);

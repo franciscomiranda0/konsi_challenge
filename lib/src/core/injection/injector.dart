@@ -11,6 +11,7 @@ import 'package:konsi_challenge/src/domain/usecases/get_cep_by_id_usecase.dart';
 import 'package:konsi_challenge/src/domain/usecases/get_cep_usecase.dart';
 import 'package:konsi_challenge/src/domain/usecases/save_cep_usecase.dart';
 import 'package:konsi_challenge/src/presentation/blocs/cep_search/cep_search_bloc.dart';
+import 'package:konsi_challenge/src/presentation/blocs/local_cep/local_cep_cubit.dart';
 
 final injector = GetIt.instance;
 
@@ -34,4 +35,10 @@ Future<void> initializeDependencies() async {
   injector.registerSingleton<SaveCepUseCase>(SaveCepUseCase(injector()));
   injector.registerSingleton<EraseCepUseCase>(EraseCepUseCase(injector()));
   injector.registerFactory<CepSearchBloc>(() => CepSearchBloc(injector()));
+  injector.registerFactory<LocalCepCubit>(() => LocalCepCubit(
+        eraseCepUseCase: injector(),
+        getAllSavedCepsUseCase: injector(),
+        getCepByIdUseCase: injector(),
+        saveCepUseCase: injector(),
+      ));
 }

@@ -10,7 +10,7 @@ part 'local_cep_state.dart';
 
 class LocalCepCubit extends Cubit<LocalCepState> {
   final GetAllSavedCepsUseCase _getAllSavedCepsUseCase;
-  final GetCepByIdUseCase _getCepByIdUseCase;
+  final GetCepByCodeUseCase _getCepByCodeUseCase;
   final SaveCepUseCase _saveCepUseCase;
   final EraseCepUseCase _eraseCepUseCase;
 
@@ -18,15 +18,16 @@ class LocalCepCubit extends Cubit<LocalCepState> {
 
   LocalCepCubit({
     required GetAllSavedCepsUseCase getAllSavedCepsUseCase,
-    required GetCepByIdUseCase getCepByIdUseCase,
+    required GetCepByCodeUseCase getCepByIdUseCase,
     required SaveCepUseCase saveCepUseCase,
     required EraseCepUseCase eraseCepUseCase,
+    bool initialRequest = true,
   })  : _getAllSavedCepsUseCase = getAllSavedCepsUseCase,
-        _getCepByIdUseCase = getCepByIdUseCase,
+        _getCepByCodeUseCase = getCepByIdUseCase,
         _saveCepUseCase = saveCepUseCase,
         _eraseCepUseCase = eraseCepUseCase,
         super(const LocalCepInitial()) {
-    getAllSavedCeps();
+    if (initialRequest) getAllSavedCeps();
   }
 
   Future<void> getAllSavedCeps() async {
@@ -40,7 +41,7 @@ class LocalCepCubit extends Cubit<LocalCepState> {
   Future<void> getCepByCode(String code) async {
     emit(const AccessInProgress());
     _wipeData();
-    final cep = await _getCepByIdUseCase(
+    final cep = await _getCepByCodeUseCase(
       params: code.replaceAll(RegExp(r'[.,]'), ''),
     );
     if (cep != null) {

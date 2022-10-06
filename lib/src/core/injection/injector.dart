@@ -32,7 +32,8 @@ Future<void> initializeDependencies() async {
   injector.registerSingleton<GetAllSavedCepsUseCase>(
     GetAllSavedCepsUseCase(injector()),
   );
-  injector.registerSingleton<GetCepByIdUseCase>(GetCepByIdUseCase(injector()));
+  injector
+      .registerSingleton<GetCepByCodeUseCase>(GetCepByCodeUseCase(injector()));
   injector.registerSingleton<SaveCepUseCase>(SaveCepUseCase(injector()));
   injector.registerSingleton<EraseCepUseCase>(EraseCepUseCase(injector()));
   injector.registerSingleton<CepSearchBloc Function(BuildContext)>(

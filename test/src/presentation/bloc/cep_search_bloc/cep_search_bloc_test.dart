@@ -7,9 +7,7 @@ import 'package:konsi_challenge/src/domain/usecases/get_cep_usecase.dart';
 import 'package:konsi_challenge/src/presentation/blocs/cep_search/cep_search_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../../mocks.dart';
-
-class SpyGetCepUseCase extends Mock implements GetCepUseCase {}
+import '../../../../mocks.dart';
 
 void main() {
   late CepSearchBloc _cepSearchBloc;

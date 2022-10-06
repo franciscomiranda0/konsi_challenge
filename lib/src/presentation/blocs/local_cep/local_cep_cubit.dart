@@ -21,14 +21,11 @@ class LocalCepCubit extends Cubit<LocalCepState> {
     required GetCepByCodeUseCase getCepByIdUseCase,
     required SaveCepUseCase saveCepUseCase,
     required EraseCepUseCase eraseCepUseCase,
-    bool initialRequest = true,
   })  : _getAllSavedCepsUseCase = getAllSavedCepsUseCase,
         _getCepByCodeUseCase = getCepByIdUseCase,
         _saveCepUseCase = saveCepUseCase,
         _eraseCepUseCase = eraseCepUseCase,
-        super(const LocalCepInitial()) {
-    if (initialRequest) getAllSavedCeps();
-  }
+        super(const LocalCepInitial());
 
   Future<void> getAllSavedCeps() async {
     emit(const AccessInProgress());

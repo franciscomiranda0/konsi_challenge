@@ -44,6 +44,6 @@ Future<void> initializeDependencies() async {
       getAllSavedCepsUseCase: injector(),
       getCepByIdUseCase: injector(),
       saveCepUseCase: injector(),
-    ),
+    )..getAllSavedCeps(),
   );
 }

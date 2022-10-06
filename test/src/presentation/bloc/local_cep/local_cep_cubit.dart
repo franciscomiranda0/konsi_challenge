@@ -30,7 +30,6 @@ void main() {
       getCepByIdUseCase: _getCepByCodeUseCase,
       saveCepUseCase: _saveCepUseCase,
       eraseCepUseCase: _eraseCepUseCase,
-      initialRequest: false,
     );
   });
 

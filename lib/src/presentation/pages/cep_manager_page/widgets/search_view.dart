@@ -68,6 +68,7 @@ class SearchView extends HookWidget {
                 CepInputFormatter(),
               ],
               key: cepFieldKey.value,
+              keyboardType: TextInputType.number,
               textAlign: TextAlign.center,
               validator: Validators.cepValidator,
             ),

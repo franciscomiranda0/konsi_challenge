@@ -10,6 +10,8 @@ import 'package:konsi_challenge/src/presentation/blocs/local_cep/local_cep_cubit
 import 'package:konsi_challenge/src/presentation/widgets/konsi_widgets.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 
+part 'searched_cep_date.dart';
+
 class SearchView extends HookWidget {
   const SearchView({Key? key}) : super(key: key);
 
@@ -41,7 +43,7 @@ class SearchView extends HookWidget {
           children: [
             const KonsiVerticalSpacer(16),
             BlocBuilder<CepSearchBloc, CepSearchState>(
-              builder: (context, state) {
+              builder: (_, state) {
                 return AnimatedContainer(
                   curve: Curves.easeInOut,
                   duration: const Duration(milliseconds: 1250),
@@ -87,69 +89,6 @@ class SearchView extends HookWidget {
             const _SearchedCepData(),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _SearchedCepData extends StatelessWidget {
-  const _SearchedCepData({Key? key}) : super(key: key);
-
-  void _launchMapsFromCep(Cep cep) => MapsLauncher.launchQuery(
-      '${cep.street}, ${cep.city} - ${cep.state} ${cep.code}');
-
-  void _save(BuildContext context, Cep cep) =>
-      context.read<LocalCepCubit>().saveCep(cep);
-
-  @override
-  Widget build(BuildContext context) {
-    final viewHeight = MediaQuery.of(context).size.height;
-
-    return BlocListener<LocalCepCubit, LocalCepState>(
-      listener: (_, state) {
-        if (state is WriteSuccess || state is EraseSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Operação realizada com sucesso'),
-            ),
-          );
-        }
-      },
-      child: BlocBuilder<CepSearchBloc, CepSearchState>(
-        builder: (context, state) {
-          if (state is CepLoadInProgress) {
-            return const SizedBox.shrink();
-          } else if (state is CepLoadSuccess) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                KonsiVerticalSpacer(viewHeight * .2),
-                KonsiCepExpansionTile(
-                  cep: state.cep,
-                  cepExpansionTileStyle:
-                      CepExpansionTileStyle.neighborhoodEmphasis,
-                ),
-                const KonsiVerticalSpacer(16),
-                KonsiPrimaryButton(
-                  onPressed: () => _launchMapsFromCep(state.cep),
-                  child: const Text('VER NO MAPA'),
-                ),
-                const KonsiVerticalSpacer(16),
-                KonsiPrimaryButton(
-                  onPressed: () => _save(context, state.cep),
-                  child: const Text('SALVAR'),
-                ),
-                const KonsiVerticalSpacer(16),
-                KonsiSecondaryButton(
-                  onPressed: () {},
-                  child: const Text('NOVA CONSULTA'),
-                ),
-                const KonsiVerticalSpacer(16),
-              ],
-            );
-          }
-          return const SizedBox.shrink();
-        },
       ),
     );
   }

@@ -6,6 +6,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:konsi_challenge/src/core/injection/injector.dart';
 import 'package:konsi_challenge/src/domain/entities/cep.dart';
 import 'package:konsi_challenge/src/presentation/blocs/cep_search/cep_search_bloc.dart';
+import 'package:konsi_challenge/src/presentation/blocs/local_cep/local_cep_cubit.dart';
 import 'package:konsi_challenge/src/presentation/widgets/konsi_widgets.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 
@@ -96,45 +97,59 @@ class _SearchedCepData extends StatelessWidget {
   void _launchMapsFromCep(Cep cep) => MapsLauncher.launchQuery(
       '${cep.street}, ${cep.city} - ${cep.state} ${cep.code}');
 
+  void _save(BuildContext context, Cep cep) =>
+      context.read<LocalCepCubit>().saveCep(cep);
+
   @override
   Widget build(BuildContext context) {
     final viewHeight = MediaQuery.of(context).size.height;
 
-    return BlocBuilder<CepSearchBloc, CepSearchState>(
-      builder: (context, state) {
-        if (state is CepLoadInProgress) {
-          return const SizedBox.shrink();
-        } else if (state is CepLoadSuccess) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              KonsiVerticalSpacer(viewHeight * .2),
-              KonsiCepExpansionTile(
-                cep: state.cep,
-                cepExpansionTileStyle:
-                    CepExpansionTileStyle.neighborhoodEmphasis,
-              ),
-              const KonsiVerticalSpacer(16),
-              KonsiPrimaryButton(
-                onPressed: () => _launchMapsFromCep(state.cep),
-                child: const Text('VER NO MAPA'),
-              ),
-              const KonsiVerticalSpacer(16),
-              KonsiPrimaryButton(
-                onPressed: () {},
-                child: const Text('SALVAR'),
-              ),
-              const KonsiVerticalSpacer(16),
-              KonsiSecondaryButton(
-                onPressed: () {},
-                child: const Text('NOVA CONSULTA'),
-              ),
-              const KonsiVerticalSpacer(16),
-            ],
+    return BlocListener<LocalCepCubit, LocalCepState>(
+      listener: (_, state) {
+        if (state is WriteSuccess || state is EraseSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Operação realizada com sucesso'),
+            ),
           );
         }
-        return const SizedBox.shrink();
       },
+      child: BlocBuilder<CepSearchBloc, CepSearchState>(
+        builder: (context, state) {
+          if (state is CepLoadInProgress) {
+            return const SizedBox.shrink();
+          } else if (state is CepLoadSuccess) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                KonsiVerticalSpacer(viewHeight * .2),
+                KonsiCepExpansionTile(
+                  cep: state.cep,
+                  cepExpansionTileStyle:
+                      CepExpansionTileStyle.neighborhoodEmphasis,
+                ),
+                const KonsiVerticalSpacer(16),
+                KonsiPrimaryButton(
+                  onPressed: () => _launchMapsFromCep(state.cep),
+                  child: const Text('VER NO MAPA'),
+                ),
+                const KonsiVerticalSpacer(16),
+                KonsiPrimaryButton(
+                  onPressed: () => _save(context, state.cep),
+                  child: const Text('SALVAR'),
+                ),
+                const KonsiVerticalSpacer(16),
+                KonsiSecondaryButton(
+                  onPressed: () {},
+                  child: const Text('NOVA CONSULTA'),
+                ),
+                const KonsiVerticalSpacer(16),
+              ],
+            );
+          }
+          return const SizedBox.shrink();
+        },
+      ),
     );
   }
 }

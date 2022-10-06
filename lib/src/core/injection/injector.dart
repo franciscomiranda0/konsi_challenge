@@ -37,10 +37,12 @@ Future<void> initializeDependencies() async {
   injector.registerSingleton<EraseCepUseCase>(EraseCepUseCase(injector()));
   injector.registerSingleton<CepSearchBloc Function(BuildContext)>(
       (_) => CepSearchBloc(injector()));
-  injector.registerFactory<LocalCepCubit>(() => LocalCepCubit(
-        eraseCepUseCase: injector(),
-        getAllSavedCepsUseCase: injector(),
-        getCepByIdUseCase: injector(),
-        saveCepUseCase: injector(),
-      ));
+  injector.registerSingleton<LocalCepCubit Function(BuildContext)>(
+    (_) => LocalCepCubit(
+      eraseCepUseCase: injector(),
+      getAllSavedCepsUseCase: injector(),
+      getCepByIdUseCase: injector(),
+      saveCepUseCase: injector(),
+    ),
+  );
 }

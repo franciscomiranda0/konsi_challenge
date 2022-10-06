@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:konsi_challenge/src/core/injection/injector.dart';
+import 'package:konsi_challenge/src/presentation/blocs/local_cep/local_cep_cubit.dart';
 import 'package:konsi_challenge/src/presentation/pages/cep_manager_page/widgets/notebook_view.dart';
 import 'package:konsi_challenge/src/presentation/pages/cep_manager_page/widgets/search_view.dart';
 
 class CepManagerPage extends HookWidget {
-  static const _views = [NotebookView(), SearchView()];
-
   const CepManagerPage({Key? key}) : super(key: key);
 
   void _setSelectedView({
@@ -20,30 +21,33 @@ class CepManagerPage extends HookWidget {
   Widget build(BuildContext context) {
     final selectedView = useState<CepManagerView>(const CepManagerView.first());
 
-    return Theme(
-      data: ThemeData(primarySwatch: selectedView.value.primarySwatch),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Gerenciador de CEPs'),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: selectedView.value.selectedIndex,
-          onTap: (index) => _setSelectedView(
-            index: index,
-            viewState: selectedView,
+    return BlocProvider<LocalCepCubit>(
+      create: injector(),
+      child: Theme(
+        data: ThemeData(primarySwatch: selectedView.value.primarySwatch),
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Gerenciador de CEPs'),
           ),
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.book),
-              label: 'Caderneta',
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: selectedView.value.selectedIndex,
+            onTap: (index) => _setSelectedView(
+              index: index,
+              viewState: selectedView,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: 'Pesquisa',
-            ),
-          ],
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.book),
+                label: 'Caderneta',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.search),
+                label: 'Pesquisa',
+              ),
+            ],
+          ),
+          body: selectedView.value.view,
         ),
-        body: selectedView.value.view,
       ),
     );
   }

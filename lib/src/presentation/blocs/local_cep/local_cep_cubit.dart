@@ -25,27 +25,27 @@ class LocalCepCubit extends Cubit<LocalCepState> {
         _eraseCepUseCase = eraseCepUseCase,
         super(const LocalCepInitial());
 
-  Future<void> _getAllSavedCeps() async {
-    emit(const LocalCepLoadInProgress());
+  Future<void> getAllSavedCeps() async {
+    emit(const AccessInProgress());
     final ceps = await _getAllSavedCepsUseCase(params: null);
-    emit(LocalCepLoadSuccess(ceps));
+    emit(ReadSuccess(ceps));
   }
 
-  Future<void> _getCepById(int id) async {
-    emit(const LocalCepLoadInProgress());
+  Future<void> getCepById(int id) async {
+    emit(const AccessInProgress());
     final ceps = await _getCepByIdUseCase(params: id);
-    emit(LocalCepLoadSuccess(ceps != null ? [ceps] : []));
+    emit(ReadSuccess(ceps != null ? [ceps] : []));
   }
 
-  Future<void> _saveCep(Cep cep) async {
-    emit(const LocalCepLoadInProgress());
+  Future<void> saveCep(Cep cep) async {
+    emit(const AccessInProgress());
     await _saveCepUseCase(params: cep);
-    emit(const LocalCepLoadSuccess([]));
+    emit(const WriteSuccess());
   }
 
   Future<void> eraseCep(Cep cep) async {
-    emit(const LocalCepLoadInProgress());
+    emit(const AccessInProgress());
     await _eraseCepUseCase(params: cep);
-    emit(const LocalCepLoadSuccess([]));
+    emit(const EraseSuccess());
   }
 }

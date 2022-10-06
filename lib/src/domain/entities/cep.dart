@@ -4,7 +4,7 @@ import 'package:konsi_challenge/src/core/utils/constants.dart';
 @Entity(tableName: Constants.cepTableName)
 class Cep {
   @PrimaryKey(autoGenerate: true)
-  final int id;
+  final int? id;
 
   final String code;
   final String state;
@@ -13,7 +13,7 @@ class Cep {
   final String street;
 
   const Cep({
-    required this.id,
+    this.id,
     required this.code,
     required this.state,
     required this.city,

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:konsi_challenge/src/core/injection/injector.dart';
+import 'package:konsi_challenge/src/core/utils/validators.dart';
 import 'package:konsi_challenge/src/domain/entities/cep.dart';
 import 'package:konsi_challenge/src/presentation/blocs/cep_search/cep_search_bloc.dart';
 import 'package:konsi_challenge/src/presentation/blocs/local_cep/local_cep_cubit.dart';
@@ -91,21 +92,5 @@ class SearchView extends HookWidget {
         ),
       ),
     );
-  }
-}
-
-class Validators {
-  const Validators._();
-
-  static String? cepValidator(String? cep) {
-    String? errorText;
-
-    if (cep != null) {
-      if (cep.length != 10) {
-        errorText = 'Formato de CEP inválido.';
-      }
-    }
-
-    return errorText;
   }
 }

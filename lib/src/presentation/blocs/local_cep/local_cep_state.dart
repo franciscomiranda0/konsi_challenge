@@ -5,12 +5,6 @@ abstract class LocalCepState {
   const LocalCepState();
 }
 
-abstract class WithData extends LocalCepState {
-  final List<Cep> ceps;
-
-  const WithData(this.ceps);
-}
-
 class LocalCepInitial extends LocalCepState {
   const LocalCepInitial();
 }
@@ -19,8 +13,8 @@ class AccessInProgress extends LocalCepState {
   const AccessInProgress();
 }
 
-class ReadSuccess extends WithData {
-  const ReadSuccess(super.ceps);
+class ReadSuccess extends LocalCepState {
+  const ReadSuccess();
 }
 
 class WriteSuccess extends LocalCepState {

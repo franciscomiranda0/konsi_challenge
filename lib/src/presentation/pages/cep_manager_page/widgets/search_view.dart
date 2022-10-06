@@ -11,7 +11,7 @@ import 'package:konsi_challenge/src/presentation/blocs/local_cep/local_cep_cubit
 import 'package:konsi_challenge/src/presentation/widgets/konsi_widgets.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 
-part 'searched_cep_date.dart';
+part 'searched_cep_data.dart';
 
 class SearchView extends HookWidget {
   const SearchView({Key? key}) : super(key: key);
@@ -28,6 +28,12 @@ class SearchView extends HookWidget {
   }
 
   void _dismiss(BuildContext context) => FocusScope.of(context).unfocus();
+
+  void _launchMapsFromCep(Cep cep) => MapsLauncher.launchQuery(
+      '${cep.street}, ${cep.city} - ${cep.state} ${cep.code}');
+
+  void _save(BuildContext context, Cep cep) =>
+      context.read<LocalCepCubit>().saveCep(cep);
 
   @override
   Widget build(BuildContext context) {
@@ -48,31 +54,19 @@ class SearchView extends HookWidget {
                 return AnimatedContainer(
                   curve: Curves.easeInOut,
                   duration: const Duration(milliseconds: 1250),
-                  height: state is CepInitial ||
-                          state is CepLoadInProgress ||
-                          state is CepLoadError
-                      ? viewHeight * .3
-                      : 0,
+                  height: state is! CepLoadSuccess ? viewHeight * .3 : 0,
                 );
               },
             ),
-            TextFormField(
+            KonsiTextFormField(
               controller: cepController,
-              cursorColor: Colors.green,
-              decoration: const InputDecoration(
-                contentPadding: EdgeInsets.symmetric(horizontal: 8),
-                fillColor: Colors.black12,
-                filled: true,
-                hintText: 'digite um CEP para começar',
-                hintStyle: TextStyle(color: Colors.black45),
-              ),
+              hint: 'digite um CEP para começar',
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 CepInputFormatter(),
               ],
               key: cepFieldKey.value,
               keyboardType: TextInputType.number,
-              textAlign: TextAlign.center,
               validator: Validators.cepValidator,
             ),
             BlocBuilder<CepSearchBloc, CepSearchState>(
@@ -87,7 +81,10 @@ class SearchView extends HookWidget {
                 child: const Text('PESQUISAR'),
               );
             }),
-            const _SearchedCepData(),
+            _SearchedCepData(
+              onMapsPressed: _launchMapsFromCep,
+              onSavePressed: _save,
+            ),
           ],
         ),
       ),

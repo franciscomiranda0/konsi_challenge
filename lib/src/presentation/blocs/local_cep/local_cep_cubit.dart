@@ -14,6 +14,8 @@ class LocalCepCubit extends Cubit<LocalCepState> {
   final SaveCepUseCase _saveCepUseCase;
   final EraseCepUseCase _eraseCepUseCase;
 
+  final _ceps = <Cep>[];
+
   LocalCepCubit({
     required GetAllSavedCepsUseCase getAllSavedCepsUseCase,
     required GetCepByIdUseCase getCepByIdUseCase,
@@ -23,18 +25,28 @@ class LocalCepCubit extends Cubit<LocalCepState> {
         _getCepByIdUseCase = getCepByIdUseCase,
         _saveCepUseCase = saveCepUseCase,
         _eraseCepUseCase = eraseCepUseCase,
-        super(const LocalCepInitial());
+        super(const LocalCepInitial()) {
+    getAllSavedCeps();
+  }
 
   Future<void> getAllSavedCeps() async {
     emit(const AccessInProgress());
-    final ceps = await _getAllSavedCepsUseCase(params: null);
-    emit(ReadSuccess(ceps));
+    _wipeData();
+    _ceps.addAll(await _getAllSavedCepsUseCase(params: null));
+
+    emit(const ReadSuccess());
   }
 
-  Future<void> getCepById(int id) async {
+  Future<void> getCepByCode(String code) async {
     emit(const AccessInProgress());
-    final ceps = await _getCepByIdUseCase(params: id);
-    emit(ReadSuccess(ceps != null ? [ceps] : []));
+    _wipeData();
+    final cep = await _getCepByIdUseCase(
+      params: code.replaceAll(RegExp(r'[.,]'), ''),
+    );
+    if (cep != null) {
+      _ceps.add(cep);
+      emit(const ReadSuccess());
+    }
   }
 
   Future<void> saveCep(Cep cep) async {
@@ -48,4 +60,8 @@ class LocalCepCubit extends Cubit<LocalCepState> {
     await _eraseCepUseCase(params: cep);
     emit(const EraseSuccess());
   }
+
+  void _wipeData() => _ceps.removeRange(0, _ceps.length);
+
+  List<Cep> get ceps => List.of(_ceps);
 }

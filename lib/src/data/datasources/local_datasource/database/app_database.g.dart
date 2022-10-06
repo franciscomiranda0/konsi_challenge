@@ -85,7 +85,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Cep` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `code` TEXT NOT NULL, `state` TEXT NOT NULL, `city` TEXT NOT NULL, `neighborhood` TEXT NOT NULL, `street` TEXT NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `Cep` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `code` TEXT NOT NULL, `state` TEXT NOT NULL, `city` TEXT NOT NULL, `neighborhood` TEXT NOT NULL, `street` TEXT NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -142,7 +142,7 @@ class _$CepDao extends CepDao {
   Future<List<Cep>> getAllCeps() async {
     return _queryAdapter.queryList('SELECT * FROM Cep',
         mapper: (Map<String, Object?> row) => Cep(
-            id: row['id'] as int,
+            id: row['id'] as int?,
             code: row['code'] as String,
             state: row['state'] as String,
             city: row['city'] as String,
@@ -151,16 +151,16 @@ class _$CepDao extends CepDao {
   }
 
   @override
-  Future<Cep?> getCepById(int id) async {
-    return _queryAdapter.query('Select * FROM Cep WHERE id = ?1',
+  Future<Cep?> getCepByCode(String code) async {
+    return _queryAdapter.query('Select * FROM Cep WHERE code = ?1',
         mapper: (Map<String, Object?> row) => Cep(
-            id: row['id'] as int,
+            id: row['id'] as int?,
             code: row['code'] as String,
             state: row['state'] as String,
             city: row['city'] as String,
             neighborhood: row['neighborhood'] as String,
             street: row['street'] as String),
-        arguments: [id]);
+        arguments: [code]);
   }
 
   @override

@@ -1,13 +1,14 @@
 part of 'search_view.dart';
 
 class _SearchedCepData extends StatelessWidget {
-  const _SearchedCepData({Key? key}) : super(key: key);
+  final void Function(Cep) onMapsPressed;
+  final void Function(BuildContext, Cep) onSavePressed;
 
-  void _launchMapsFromCep(Cep cep) => MapsLauncher.launchQuery(
-      '${cep.street}, ${cep.city} - ${cep.state} ${cep.code}');
-
-  void _save(BuildContext context, Cep cep) =>
-      context.read<LocalCepCubit>().saveCep(cep);
+  const _SearchedCepData({
+    required this.onMapsPressed,
+    required this.onSavePressed,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,18 +40,13 @@ class _SearchedCepData extends StatelessWidget {
                 ),
                 const KonsiVerticalSpacer(16),
                 KonsiPrimaryButton(
-                  onPressed: () => _launchMapsFromCep(state.cep),
+                  onPressed: () => onMapsPressed(state.cep),
                   child: const Text('VER NO MAPA'),
                 ),
                 const KonsiVerticalSpacer(16),
                 KonsiPrimaryButton(
-                  onPressed: () => _save(context, state.cep),
+                  onPressed: () => onSavePressed(context, state.cep),
                   child: const Text('SALVAR'),
-                ),
-                const KonsiVerticalSpacer(16),
-                KonsiSecondaryButton(
-                  onPressed: () {},
-                  child: const Text('NOVA CONSULTA'),
                 ),
                 const KonsiVerticalSpacer(16),
               ],

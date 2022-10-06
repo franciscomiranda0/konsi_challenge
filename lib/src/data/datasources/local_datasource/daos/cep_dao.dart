@@ -7,8 +7,8 @@ abstract class CepDao {
   @Query('SELECT * FROM ${Constants.cepTableName}')
   Future<List<Cep>> getAllCeps();
 
-  @Query('Select * FROM ${Constants.cepTableName} WHERE id = :id')
-  Future<Cep?> getCepById(int id);
+  @Query('Select * FROM ${Constants.cepTableName} WHERE code = :code')
+  Future<Cep?> getCepByCode(String code);
 
   @Insert(onConflict: OnConflictStrategy.replace)
   Future<void> insertCep(Cep cep);

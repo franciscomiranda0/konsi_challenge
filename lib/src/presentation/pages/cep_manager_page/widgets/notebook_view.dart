@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:konsi_challenge/src/core/utils/validators.dart';
+import 'package:konsi_challenge/src/domain/entities/cep.dart';
 import 'package:konsi_challenge/src/presentation/blocs/local_cep/local_cep_cubit.dart';
 import 'package:konsi_challenge/src/presentation/widgets/konsi_widgets.dart';
 
@@ -11,6 +12,9 @@ part 'notebook_view_search_header.dart';
 
 class NotebookView extends StatelessWidget {
   const NotebookView({Key? key}) : super(key: key);
+
+  void _deleteCep(BuildContext context, Cep cep) =>
+      context.read<LocalCepCubit>().eraseCep(cep);
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +50,7 @@ class NotebookView extends StatelessWidget {
                   return KonsiCepExpansionTile(
                     cep: localCepsCubit.ceps[index],
                     cepExpansionTileStyle: CepExpansionTileStyle.cepEmphasis,
+                    onDeletePressed: (Cep cep) => _deleteCep(context, cep),
                   );
                 },
               );

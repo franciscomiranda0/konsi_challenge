@@ -14,10 +14,12 @@ class KonsiCepExpansionTile extends HookWidget {
 
   final Cep _cep;
   final CepExpansionTileStyle _cepExpansionTileStyle;
+  final void Function(Cep)? onDeletePressed;
 
   const KonsiCepExpansionTile({
     required Cep cep,
     required CepExpansionTileStyle cepExpansionTileStyle,
+    this.onDeletePressed,
     Key? key,
   })  : _cep = cep,
         _cepExpansionTileStyle = cepExpansionTileStyle,
@@ -60,6 +62,13 @@ class KonsiCepExpansionTile extends HookWidget {
           label: 'UF',
           value: _cep.state,
         ),
+        if (_cepExpansionTileStyle == CepExpansionTileStyle.cepEmphasis) ...[
+          const KonsiVerticalSpacer(32),
+          KonsiSecondaryButton(
+            onPressed: () => onDeletePressed?.call(_cep),
+            child: const Text('EXCLUIR'),
+          ),
+        ],
       ],
     );
   }

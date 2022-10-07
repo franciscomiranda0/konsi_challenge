@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class KonsiSecondaryButton extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final Widget child;
   final EdgeInsetsGeometry? padding;
   final bool showLoadIndicator;
 
   const KonsiSecondaryButton({
-    required this.onPressed,
     required this.child,
+    this.onPressed,
     this.showLoadIndicator = false,
     this.padding,
     super.key,

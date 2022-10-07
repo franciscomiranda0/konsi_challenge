@@ -43,49 +43,64 @@ class SearchView extends HookWidget {
 
     return BlocProvider<CepSearchBloc>(
       create: injector(),
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const KonsiVerticalSpacer(16),
-            BlocBuilder<CepSearchBloc, CepSearchState>(
-              builder: (_, state) {
-                return AnimatedContainer(
-                  curve: Curves.easeInOut,
-                  duration: const Duration(milliseconds: 1250),
-                  height: state is! CepLoadSuccess ? viewHeight * .3 : 0,
-                );
-              },
-            ),
-            KonsiTextFormField(
-              controller: cepController,
-              hint: 'digite um CEP para começar',
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                CepInputFormatter(),
-              ],
-              key: cepFieldKey.value,
-              keyboardType: TextInputType.number,
-              validator: Validators.cepValidator,
-            ),
-            BlocBuilder<CepSearchBloc, CepSearchState>(
-                builder: (context, state) {
-              return KonsiPrimaryButton(
-                showLoadIndicator: state is CepLoadInProgress,
-                onPressed: () => _validateAndGetCep(
-                  context,
-                  cepController.text,
-                  cepFieldKey.value,
+      child: BlocListener<LocalCepCubit, LocalCepState>(
+        listener: (_, state) {
+          if (state is WriteSuccess || state is EraseSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: const Text('Operação realizada com sucesso'),
+                action: SnackBarAction(
+                  label: 'label',
+                  onPressed: () {},
                 ),
-                child: const Text('PESQUISAR'),
-              );
-            }),
-            _SearchedCepData(
-              onMapsPressed: _launchMapsFromCep,
-              onSavePressed: _save,
-            ),
-          ],
+              ),
+            );
+          }
+        },
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const KonsiVerticalSpacer(16),
+              BlocBuilder<CepSearchBloc, CepSearchState>(
+                builder: (_, state) {
+                  return AnimatedContainer(
+                    curve: Curves.easeInOut,
+                    duration: const Duration(milliseconds: 1250),
+                    height: state is! CepLoadSuccess ? viewHeight * .3 : 0,
+                  );
+                },
+              ),
+              KonsiTextFormField(
+                controller: cepController,
+                hint: 'digite um CEP para começar',
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  CepInputFormatter(),
+                ],
+                key: cepFieldKey.value,
+                keyboardType: TextInputType.number,
+                validator: Validators.cepValidator,
+              ),
+              BlocBuilder<CepSearchBloc, CepSearchState>(
+                  builder: (context, state) {
+                return KonsiPrimaryButton(
+                  showLoadIndicator: state is CepLoadInProgress,
+                  onPressed: () => _validateAndGetCep(
+                    context,
+                    cepController.text,
+                    cepFieldKey.value,
+                  ),
+                  child: const Text('PESQUISAR'),
+                );
+              }),
+              _SearchedCepData(
+                onMapsPressed: _launchMapsFromCep,
+                onSavePressed: _save,
+              ),
+            ],
+          ),
         ),
       ),
     );
